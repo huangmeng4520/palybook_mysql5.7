@@ -1,0 +1,28 @@
+#执行模板文件进行安装
+- name: install yum-utils
+  yum: name=yum-utils state=present
+- name: install mysql yum reepo
+  shell: yum localinstall -y mysql80-community-release-el7-1.noarch.rpm
+  args:
+    chdir: "{{ rpm_dir }}"
+- name: 禁用mysql80 yum源
+  shell: yum-config-manager --disable mysql80-community
+  args:
+    chdir: "{{ rpm_dir }}"
+- name: 开启mysql70 yum源
+  shell: yum-config-manager --enable mysql57-community
+  args:
+    chdir: "{{ rpm_dir }}"
+- name: install mysql7
+  yum: name=mysql-community-server state=present
+- name: 复制配置文件到mysql服务
+  copy: src=my.cnf dest=/etc/my.cnf
+  notify: restart mysql
+- name: 设置开启自启动并启动mysql
+  service: name=mysqld.service enabled=yes state=started
+- name: install expect
+  yum: name=expect state=present
+- name: 修改mysql默认密码并开启root远程登录
+  script: mysql_user.sh
+
+

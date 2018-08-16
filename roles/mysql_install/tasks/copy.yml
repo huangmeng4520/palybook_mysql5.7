@@ -1,0 +1,9 @@
+#复制源码至目标服务器
+- name: copy mysql source code to client
+  copy: src=mysql80-community-release-el7-1.noarch.rpm dest={{rpm_dir}} owner=root group=root
+#复制配置文件至目标服务器
+# - name: copy my.cnf to client
+#   copy: src=my.cnf dest=/etc/my.cnf owner=root group=root
+# #复制模板文件至目标服务器
+# - name: copy mysql install script to client
+#   template: src=mysql_install.sh dest={{source_dir}} owner=root group=root mode=0775
